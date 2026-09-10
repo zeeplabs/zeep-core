@@ -1,6 +1,20 @@
 {
   "entries": [
     {
+      "version": "v1.8.4",
+      "release_date": "2026-09-10",
+      "title": {"en": "List Endpoint Filter & Soft-Delete Docs", "pt-BR": "Documentação de Filtros e Soft-Delete do Endpoint de Listagem"},
+      "summary": {"en": "Patch release fixing the generated OpenAPI/Swagger documentation for an app's list endpoint (GET /{app}/{table}), which only documented limit/offset/order even though per-column filtering and the soft-delete toggle were already fully functional.", "pt-BR": "Release de correção para a documentação OpenAPI/Swagger gerada do endpoint de listagem de um app (GET /{app}/{table}), que só documentava limit/offset/order mesmo com os filtros por coluna e o toggle de soft-delete já totalmente funcionais."},
+      "sections": [
+        {
+          "type": "fixes",
+          "items": [
+            {"description": {"en": "The generated API docs for GET /{app}/{table} now describe the per-column filter syntax (?column=operator.value, e.g. eq./gt./ilike./in.) and document the deleted query parameter used to include soft-deleted rows — both were already implemented and working, just missing from the spec.", "pt-BR": "A documentação de API gerada para GET /{app}/{table} agora descreve a sintaxe de filtro por coluna (?coluna=operador.valor, ex. eq./gt./ilike./in.) e documenta o parâmetro deleted usado para incluir registros com soft-delete — ambos já estavam implementados e funcionando, só faltavam na spec."}}
+          ]
+        }
+      ]
+    },
+    {
       "version": "v1.8.3",
       "release_date": "2026-09-05",
       "title": {"en": "Google Sign-In Provisioning & Email-Case Fixes", "pt-BR": "Correções de Provisionamento do Login Google e Case de Email"},
