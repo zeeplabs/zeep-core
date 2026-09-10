@@ -36,6 +36,7 @@ type pathItem struct {
 type operation struct {
 	Tags        []string              `json:"tags"`
 	Summary     string                `json:"summary"`
+	Description string                `json:"description,omitempty"`
 	OperationID string                `json:"operationId"`
 	Security    []map[string][]string `json:"security"`
 	Parameters  []parameter           `json:"parameters,omitempty"`
@@ -44,10 +45,11 @@ type operation struct {
 }
 
 type parameter struct {
-	Name     string      `json:"name"`
-	In       string      `json:"in"`
-	Required bool        `json:"required,omitempty"`
-	Schema   schemaOrRef `json:"schema"`
+	Name        string      `json:"name"`
+	In          string      `json:"in"`
+	Required    bool        `json:"required,omitempty"`
+	Description string      `json:"description,omitempty"`
+	Schema      schemaOrRef `json:"schema"`
 }
 
 type requestBody struct {
@@ -182,12 +184,14 @@ func generate(apps []*registry.App) *Spec {
 				Get: &operation{
 					Tags:        []string{appName},
 					Summary:     fmt.Sprintf("List %s", tableName),
+					Description: "Supports filtering by any column via `?column=operator.value` (operators: eq., ne., gt., gte., lt., lte., like., ilike., in.; e.g. `?status=eq.active`, `?age=gte.18`, `?status=in.active,pending`). Unknown query parameters (not a real column, and not limit/offset/order/deleted) return 400.",
 					OperationID: fmt.Sprintf("list_%s_%s", appName, tableName),
 					Security:    security,
 					Parameters: []parameter{
 						{Name: "limit", In: "query", Schema: schemaOrRef{Type: "integer", Format: "int32"}},
 						{Name: "offset", In: "query", Schema: schemaOrRef{Type: "integer", Format: "int32"}},
-						{Name: "order", In: "query", Schema: schemaOrRef{Type: "string"}},
+						{Name: "order", In: "query", Description: "Sort by a column; the direction suffix is required, e.g. `created_at.desc` or `created_at.asc`.", Schema: schemaOrRef{Type: "string"}},
+						{Name: "deleted", In: "query", Description: "Only `true` is accepted (includes soft-deleted rows when soft delete is enabled). Any other value returns 400.", Schema: schemaOrRef{Type: "string", Enum: []string{"true"}}},
 					},
 					Responses: map[string]response{
 						"200": {Description: "OK", Content: jsonContent(schemaOrRef{Ref: "#/components/schemas/" + listName})},
