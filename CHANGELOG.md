@@ -9,6 +9,10 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- **The generated OpenAPI spec for the `GET /{app}/{table}` list endpoint documented `limit`/`offset`/`order` but omitted the per-column filter syntax (`?column=operator.value`, e.g. `eq.`/`gt.`/`ilike.`/`in.`) and the `deleted` soft-delete toggle**, even though both are implemented and functional in `HandleList`/`BuildList`. Added a `deleted` query parameter and a description on the list operation documenting the filter syntax (`internal/docs/generator.go`). Per-column typed parameters weren't added — filters apply to any table column, which OpenAPI can't express without one parameter per column per table.
+
 ## [1.8.3] — 2026-09-05
 
 ### Fixed
